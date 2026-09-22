@@ -512,7 +512,7 @@
                 { id: 'v6', nombre: 'Cabernet Franc Gran Reserva', varietal: 'cabernet-franc', precio: '$21.000' }
             ],
             config: {
-                whatsapp_numero: '5493510000000',
+                whatsapp_numero: '5493513288388',
                 whatsapp_mensaje_default: 'Hola Elixir! Quisiera hacer una consulta.',
                 localidad_texto: 'Alberdi, Córdoba'
             }
@@ -698,7 +698,7 @@
             const lugares = document.getElementById('reservaLugares').value;
             const total = document.getElementById('reservaTotal').textContent;
             const eventoNombre = select.value;
-            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+            const numeroWa = catalogo.config.whatsapp_numero || '5493513288388';
 
             document.getElementById('reservaExitoTitulo').textContent = `¡Excelente, ${nombre}! Registramos tu solicitud.`;
             document.getElementById('reservaExitoDetalle').textContent = `Reserva para ${lugares} lugar(es) en: "${eventoNombre}". Total a abonar: ${total}`;
@@ -737,7 +737,7 @@
             const checkboxes = document.querySelectorAll('.box-item-check:checked');
             const motivo = document.getElementById('boxMotivo').value.trim() || '¡Felicitaciones!';
             const total = document.getElementById('boxTotalPrecio').textContent;
-            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+            const numeroWa = catalogo.config.whatsapp_numero || '5493513288388';
 
             let items = [];
             checkboxes.forEach(c => items.push(c.value));
@@ -755,7 +755,7 @@
             e.preventDefault();
             const nombre = document.getElementById('privadoNombre').value.trim();
             const whatsapp = document.getElementById('privadoWhatsapp').value.trim();
-            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+            const numeroWa = catalogo.config.whatsapp_numero || '5493513288388';
             const mensaje = `Hola ELIXIR! Quisiera consultar presupuesto para un evento privado.\n👤 *Nombre:* ${nombre}\n📱 *Teléfono:* ${whatsapp}`;
             window.open(`https://wa.me/${numeroWa}?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
