@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELIXIR - Wines & Spirits | Alberdi, Córdoba</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cormorant Garamond & Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: {
+                            900: '#1a0509',
+                            800: '#2c0b12',
+                            700: '#4a121e',
+                            600: '#6b1828',
+                            500: '#8c1f33',
+                            400: '#b8324a'
+                        },
+                        gold: {
+                            300: '#f7e7b4',
+                            400: '#e6c875',
+                            500: '#d4af37',
+                            600: '#aa8822'
+                        },
+                        darkslate: '#0f0e13'
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0c0a0e;
+            color: #e2e8f0;
+            font-family: 'Montserrat', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(74, 18, 30, 0.35) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .gold-border-glow {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .gold-border-glow:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(22, 18, 26, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #4a121e 0%, #2c0b12 100%);
+            border-color: #d4af37 !important;
+            color: #f7e7b4 !important;
+            box-shadow: 0 4px 15px rgba(74, 18, 30, 0.5);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0e13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a121e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b1828;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-wine-600 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm pointer-events-none"></div>
+
+    <header class="border-b border-white/10 bg-wine-900/40 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-center sm:text-left">
+                <div class="flex items-center justify-center p-1 group hover:scale-105 transition duration-300">
+                    <svg viewBox="0 0 100 115" class="w-12 h-14" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 18 22 Q 22 22 22 17 Q 22 22 26 22 Q 22 22 22 27 Q 22 22 18 22 Z" fill="#f7e7b4" />
+                        <path d="M 78 30 Q 83 30 83 25 Q 83 30 88 30 Q 83 30 83 35 Q 83 30 78 30 Z" fill="#f7e7b4" />
+                        <path d="M 12 58 Q 15 58 15 55 Q 15 58 18 58 Q 15 58 15 61 Q 15 58 12 58 Z" fill="#d4af37" />
+                        <path d="M 82 76 Q 87 76 87 71 Q 87 76 92 76 Q 87 76 87 81 Q 87 76 82 76 Z" fill="#d4af37" />
+
+                        <g stroke="#f7e7b4" stroke-width="2.5" stroke-linecap="round" fill="none">
+                            <path d="M 50 35 C 48 20 40 10 32 8 C 40 16 44 26 46 35" />
+                            <path d="M 50 35 C 52 20 60 10 68 8 C 60 16 56 26 54 35" />
+                            <path d="M 50 35 C 49 15 45 5 50 2 C 53 8 52 22 50 35" />
+                            <path d="M 45 35 C 38 25 28 20 20 22 C 30 26 38 32 42 37" />
+                            <path d="M 55 35 C 62 25 72 20 80 22 C 70 26 62 32 58 37" />
+                        </g>
+
+                        <ellipse cx="50" cy="70" rx="23" ry="30" stroke="#d4af37" stroke-width="2.5" fill="none"/>
+                        <g stroke="#d4af37" stroke-width="1.8" stroke-linecap="round">
+                            <line x1="33" y1="48" x2="67" y2="92" />
+                            <line x1="28" y1="60" x2="62" y2="98" />
+                            <line x1="38" y1="42" x2="72" y2="84" />
+                            <line x1="67" y1="48" x2="33" y2="92" />
+                            <line x1="72" y1="60" x2="38" y2="98" />
+                            <line x1="62" y1="42" x2="28" y2="84" />
+                        </g>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-serif text-2xl sm:text-3xl font-bold tracking-[0.12em] text-white uppercase leading-none">
+                        ELIXIR
+                    </h1>
+                    <p class="text-xs text-gold-400 tracking-[0.22em] font-medium uppercase mt-1">
+                        Wines & Spirits • <span id="headerLocalidad" class="text-gray-300 tracking-normal">Alberdi, Cba</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick WhatsApp Badge -->
+            <div class="flex items-center gap-3 text-xs">
+                <a id="btnHeaderWhatsapp" href="https://wa.me/5493510000000?text=Hola%20Elixir!%20Quisiera%20hacer%20una%20consulta." target="_blank" class="bg-green-950/60 hover:bg-green-900/80 text-green-300 border border-green-500/30 px-4 py-2 rounded-full flex items-center gap-2 transition font-medium">
+                    <i class="fa-brands fa-whatsapp text-green-400 text-sm"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <!-- Subheader intro -->
+        <div class="text-center max-w-2xl mx-auto mb-8">
+            <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white mb-2">Vinos, Cócteles y Experiencias</h2>
+            <p class="text-gray-400 text-sm sm:text-base">Un espacio para apasionados del buen beber.</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-7xl mx-auto mb-10">
+            <button onclick="switchTab('cocteles')" id="tab-cocteles" class="tab-btn tab-active py-3.5 px-4 rounded-xl border border-white/10 glass-card text-left transition duration-300 flex items-center justify-between group">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 rounded-lg bg-wine-800/80 text-gold-400 group-hover:scale-110 transition">🍸</span>
+                    <div>
+                        <div class="font-semibold text-xs sm:text-sm">Tragos y Cócteles</div>
+                        <div class="text-[10px] text-gray-400">Coctelería de autor</div>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('vinos')" id="tab-vinos" class="tab-btn py-3.5 px-4 rounded-xl border border-white/10 glass-card text-left transition duration-300 flex items-center justify-between group hover:border-gold-500/40">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 rounded-lg bg-wine-800/80 text-gold-400 group-hover:scale-110 transition">🍷</span>
+                    <div>
+                        <div class="font-semibold text-xs sm:text-sm">Carta de Vinos</div>
+                        <div class="text-[10px] text-gray-400">Varietales y Cava</div>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('eventos')" id="tab-eventos" class="tab-btn py-3.5 px-4 rounded-xl border border-white/10 glass-card text-left transition duration-300 flex items-center justify-between group hover:border-gold-500/40">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 rounded-lg bg-wine-800/80 text-gold-400 group-hover:scale-110 transition">📅</span>
+                    <div>
+                        <div class="font-semibold text-xs sm:text-sm">Reservar Taller</div>
+                        <div class="text-[10px] text-gray-400">Degustaciones y catas</div>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('box')" id="tab-box" class="tab-btn py-3.5 px-4 rounded-xl border border-white/10 glass-card text-left transition duration-300 flex items-center justify-between group hover:border-gold-500/40">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 rounded-lg bg-wine-800/80 text-gold-400 group-hover:scale-110 transition">🎁</span>
+                    <div>
+                        <div class="font-semibold text-xs sm:text-sm">Armar Box Regalo</div>
+                        <div class="text-[10px] text-gray-400">Personaliza tu caja</div>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('privados')" id="tab-privados" class="tab-btn col-span-2 sm:col-span-1 py-3.5 px-4 rounded-xl border border-white/10 glass-card text-left transition duration-300 flex items-center justify-between group hover:border-gold-500/40">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 rounded-lg bg-wine-800/80 text-gold-400 group-hover:scale-110 transition">🎉</span>
+                    <div>
+                        <div class="font-semibold text-xs sm:text-sm">Eventos Privados</div>
+                        <div class="text-[10px] text-gray-400">Cumpleaños y festejos</div>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <!-- TAB 1: TRAGOS Y CÓCTELES -->
+        <section id="section-cocteles" class="tab-content transition-all duration-300">
+            <div class="glass-card rounded-2xl p-6 md:p-8 gold-border-glow">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/10 pb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-widest text-gold-400">Coctelitos Elixir</span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">🍸 Carta de Tragos y Cócteles</h3>
+                        <p class="text-sm text-gray-400">Recetas de autor y clásicos perfeccionados preparados en nuestra barra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="filtrarCocteles('todos')" class="coctel-filter-btn bg-wine-800 text-gold-300 border border-gold-500/40 px-3 py-1.5 rounded-full transition">Todos</button>
+                        <button onclick="filtrarCocteles('gin')" class="coctel-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Gin</button>
+                        <button onclick="filtrarCocteles('vermut')" class="coctel-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Vermut</button>
+                        <button onclick="filtrarCocteles('whisky')" class="coctel-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Whisky</button>
+                    </div>
+                </div>
+
+                <div id="coctelesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CARTA DE VINOS -->
+        <section id="section-vinos" class="tab-content hidden transition-all duration-300">
+            <div class="glass-card rounded-2xl p-6 md:p-8 gold-border-glow">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/10 pb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-widest text-gold-400">Cava Seleccionada</span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">🍷 Vinos Disponibles en Cava</h3>
+                        <p class="text-sm text-gray-400">Selección de bodegas boutique y etiquetas destacadas.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="filtrarVinos('todos')" class="vino-filter-btn bg-wine-800 text-gold-300 border border-gold-500/40 px-3.5 py-1.5 rounded-full transition">Todos</button>
+                        <button onclick="filtrarVinos('malbec')" class="vino-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Malbec</button>
+                        <button onclick="filtrarVinos('cabernet-franc')" class="vino-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Cabernet Franc</button>
+                        <button onclick="filtrarVinos('pinot-noir')" class="vino-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Pinot Noir</button>
+                        <button onclick="filtrarVinos('cabernet-sauvignon')" class="vino-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Cabernet Sauv.</button>
+                        <button onclick="filtrarVinos('blancos')" class="vino-filter-btn bg-darkslate/80 text-gray-400 border border-white/10 hover:border-gold-500/30 px-3 py-1.5 rounded-full transition">Blancos</button>
+                    </div>
+                </div>
+
+                <div id="vinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: TALLERES Y RESERVAS -->
+        <section id="section-eventos" class="tab-content hidden transition-all duration-300">
+            <div class="glass-card rounded-2xl p-6 md:p-8 gold-border-glow space-y-8">
+                <div class="border-b border-white/10 pb-6">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-gold-400">Degustaciones & Catas</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">📅 Reserva de Talleres y Experiencias</h3>
+                    <p class="text-sm text-gray-400">Sumate a nuestros encuentros guiados por sommeliers e invitados especiales.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-darkslate/80 rounded-xl p-5 border border-white/10 hover:border-gold-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="bg-wine-900/80 text-gold-300 text-xs font-bold px-3 py-1 rounded-full border border-gold-500/30">$18.000 / pers.</span>
+                                <span class="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Cupos Limitados</span>
+                            </div>
+                            <h4 class="font-serif font-bold text-lg text-white">Taller de Cata & Maridaje</h4>
+                            <p class="text-xs text-gold-400 mt-1">Jueves 19:30 hs • Duración: 2 hs</p>
+                            <p class="text-xs text-gray-300 mt-3 leading-relaxed">Recorrido por 4 etiquetas seleccionadas de bodegas boutique maridadas con tabla de quesos y fiambres artesanales.</p>
+                        </div>
+                        <button onclick="selectEvent('Taller de Cata & Maridaje', 18000)" class="mt-5 w-full bg-wine-800 hover:bg-wine-700 text-gold-300 text-xs font-semibold py-2 rounded-lg border border-gold-500/30 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-calendar-check"></i> Reservar este Taller
+                        </button>
+                    </div>
+
+                    <div class="bg-darkslate/80 rounded-xl p-5 border border-white/10 hover:border-gold-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="bg-wine-900/80 text-gold-300 text-xs font-bold px-3 py-1 rounded-full border border-gold-500/30">$20.000 / pers.</span>
+                                <span class="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Próxima Fecha</span>
+                            </div>
+                            <h4 class="font-serif font-bold text-lg text-white">Masterclass de Coctelería de Autor</h4>
+                            <p class="text-xs text-gold-400 mt-1">Viernes 20:00 hs • Duración: 2.5 hs</p>
+                            <p class="text-xs text-gray-300 mt-3 leading-relaxed">Aprende técnicas de almíbares, botánicos y preparación activa de 3 cócteles de autor en nuestra barra.</p>
+                        </div>
+                        <button onclick="selectEvent('Masterclass de Coctelería de Autor', 20000)" class="mt-5 w-full bg-wine-800 hover:bg-wine-700 text-gold-300 text-xs font-semibold py-2 rounded-lg border border-gold-500/30 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-calendar-check"></i> Reservar este Taller
+                        </button>
+                    </div>
+
+                    <div class="bg-darkslate/80 rounded-xl p-5 border border-white/10 hover:border-gold-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="bg-wine-900/80 text-gold-300 text-xs font-bold px-3 py-1 rounded-full border border-gold-500/30">$22.000 / pers.</span>
+                                <span class="text-[10px] text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">Últimos Lugares</span>
+                            </div>
+                            <h4 class="font-serif font-bold text-lg text-white">Cata a Ciegas: Cepas Emblemáticas</h4>
+                            <p class="text-xs text-gold-400 mt-1">Sábado 20:30 hs • Duración: 2 hs</p>
+                            <p class="text-xs text-gray-300 mt-3 leading-relaxed">Un juego sensorial para descubrir aromas, notas y regiones a través de 5 copas con etiquetas cubiertas.</p>
+                        </div>
+                        <button onclick="selectEvent('Cata a Ciegas: Cepas Emblemáticas', 22000)" class="mt-5 w-full bg-wine-800 hover:bg-wine-700 text-gold-300 text-xs font-semibold py-2 rounded-lg border border-gold-500/30 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-calendar-check"></i> Reservar este Taller
+                        </button>
+                    </div>
+                </div>
+
+                <div id="formReserva" class="bg-wine-900/30 border border-wine-700/40 rounded-xl p-6">
+                    <h4 class="font-serif text-xl font-bold text-gold-300 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-ticket"></i> Formulario de Reserva Inmediata
+                    </h4>
+
+                    <form onsubmit="procesarReserva(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Selecciona Experiencia / Taller</label>
+                                <select id="selectEvento" onchange="calcularTotalReserva()" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white focus:border-gold-500 focus:outline-none text-sm">
+                                    <option value="Taller de Cata & Maridaje" data-precio="18000">Taller de Cata & Maridaje ($18.000)</option>
+                                    <option value="Masterclass de Coctelería de Autor" data-precio="20000">Masterclass de Coctelería de Autor ($20.000)</option>
+                                    <option value="Cata a Ciegas: Cepas Emblemáticas" data-precio="22000">Cata a Ciegas: Cepas Emblemáticas ($22.000)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Cantidad de lugares</label>
+                                <input type="number" id="reservaLugares" min="1" max="10" value="1" onchange="calcularTotalReserva()" onkeyup="calcularTotalReserva()" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white focus:border-gold-500 focus:outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Nombre Completo *</label>
+                                <input type="text" id="reservaNombre" required placeholder="Ej: Mateo González" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-gold-500 focus:outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Teléfono WhatsApp *</label>
+                                <input type="tel" id="reservaWhatsapp" required placeholder="Ej: 3511234567" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-gold-500 focus:outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <span class="text-xs text-gray-400">Total a congelar: </span>
+                                <span id="reservaTotal" class="text-2xl font-bold text-gold-400">$18.000</span>
+                            </div>
+                            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-darkslate font-bold px-8 py-3 rounded-lg shadow-lg shadow-gold-500/20 transition flex items-center justify-center gap-2">
+                                Confirmar Reserva por WhatsApp
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="resultadoReserva" class="hidden mt-6 bg-emerald-950/70 border border-emerald-500/40 p-4 rounded-xl space-y-3">
+                        <h5 id="reservaExitoTitulo" class="font-serif font-bold text-emerald-300 text-lg"></h5>
+                        <p id="reservaExitoDetalle" class="text-xs text-gray-200 leading-relaxed"></p>
+                        <a id="btnWhatsappReserva" href="#" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar Comprobante por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ARMAR BOX REGALO -->
+        <section id="section-box" class="tab-content hidden transition-all duration-300">
+            <div class="glass-card rounded-2xl p-6 md:p-8 gold-border-glow">
+                <div class="mb-8 border-b border-white/10 pb-6">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-gold-400">Regalos Exclusivos</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">🎁 Armar Box Regalo Personalizado</h3>
+                    <p class="text-sm text-gray-400">Selecciona un combo predefinido o diseña tu caja personalizada a medida.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="box-item-label flex items-start gap-3 p-4 rounded-xl bg-darkslate/80 border border-white/10 hover:border-gold-500/40 cursor-pointer transition">
+                                <input type="checkbox" value="Vino Malbec de Autor" data-precio="12000" checked onchange="actualizarCotizacionBox()" class="box-item-check accent-wine-600 mt-1">
+                                <div>
+                                    <div class="font-bold text-sm text-white">Vino Malbec de Autor</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Etiqueta seleccionada de bodega boutique</div>
+                                    <div class="text-xs text-gold-400 font-semibold mt-1">+$12.000</div>
+                                </div>
+                            </label>
+
+                            <label class="box-item-label flex items-start gap-3 p-4 rounded-xl bg-darkslate/80 border border-white/10 hover:border-gold-500/40 cursor-pointer transition">
+                                <input type="checkbox" value="Gin Artesanal Premium" data-precio="18000" onchange="actualizarCotizacionBox()" class="box-item-check accent-wine-600 mt-1">
+                                <div>
+                                    <div class="font-bold text-sm text-white">Gin Artesanal Premium</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Botella de Gin de Autor local</div>
+                                    <div class="text-xs text-gold-400 font-semibold mt-1">+$18.000</div>
+                                </div>
+                            </label>
+
+                            <label class="box-item-label flex items-start gap-3 p-4 rounded-xl bg-darkslate/80 border border-white/10 hover:border-gold-500/40 cursor-pointer transition">
+                                <input type="checkbox" value="Salamines Artesanales (x2)" data-precio="6000" checked onchange="actualizarCotizacionBox()" class="box-item-check accent-wine-600 mt-1">
+                                <div>
+                                    <div class="font-bold text-sm text-white">Salamines Artesanales (x2)</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Salamín bastón / picado fino regional</div>
+                                    <div class="text-xs text-gold-400 font-semibold mt-1">+$6.000</div>
+                                </div>
+                            </label>
+
+                            <label class="box-item-label flex items-start gap-3 p-4 rounded-xl bg-darkslate/80 border border-white/10 hover:border-gold-500/40 cursor-pointer transition">
+                                <input type="checkbox" value="Vaso / Copón Exclusivo" data-precio="7500" checked onchange="actualizarCotizacionBox()" class="box-item-check accent-wine-600 mt-1">
+                                <div>
+                                    <div class="font-bold text-sm text-white">Vaso / Copón Exclusivo</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Copón de Gin o Copa de cristal</div>
+                                    <div class="text-xs text-gold-400 font-semibold mt-1">+$7.500</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-2">Dedicatoria o mensaje para la tarjeta:</label>
+                            <input type="text" id="boxMotivo" value="¡Feliz Día / Aniversario!" placeholder="Ej: ¡Feliz Cumpleaños!" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-gold-500 focus:outline-none text-sm">
+                        </div>
+                    </div>
+
+                    <div class="bg-wine-900/40 border border-wine-700/50 rounded-xl p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs uppercase tracking-widest text-gold-400 font-semibold mb-1">Resumen del Pedido</div>
+                            <h4 class="font-serif text-xl font-bold text-white mb-2">Box Regalo Elixir</h4>
+                            <p class="text-xs text-emerald-400 mb-4 font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-gift"></i> Incluye Caja Kraft Elixir + Moño Dorado
+                            </p>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="text-xs text-gray-400">Contenido seleccionado:</div>
+                                <ul id="boxListaResumen" class="space-y-2 text-xs text-gray-200"></ul>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-400">Precio Total Estimado:</span>
+                                <span id="boxTotalPrecio" class="text-2xl font-bold text-gold-400">$25.500</span>
+                            </div>
+
+                            <button onclick="procesarBox(event)" class="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-darkslate font-bold py-3 px-4 rounded-lg shadow-lg shadow-gold-500/20 transition flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Encargar Box por WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: EVENTOS PRIVADOS -->
+        <section id="section-privados" class="tab-content hidden transition-all duration-300">
+            <div class="glass-card rounded-2xl p-6 md:p-8 gold-border-glow">
+                <div class="mb-8 border-b border-white/10 pb-6">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-gold-400">Celebraciones a Medida</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">🎉 Celebra tu Cumpleaños o Evento Especial</h3>
+                    <p class="text-sm text-gray-400">Diseñamos una experiencia cercana e íntima para ti y tu grupo.</p>
+                </div>
+
+                <div class="bg-wine-900/30 border border-wine-700/40 rounded-xl p-6">
+                    <h4 class="font-serif text-xl font-bold text-gold-300 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-glass-water-droplet"></i> Solicitud de Cotización
+                    </h4>
+
+                    <form id="formEventoPrivado" onsubmit="procesarEventoPrivado(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Tu Nombre y Apellido *</label>
+                                <input type="text" id="privadoNombre" required placeholder="Ej: Sofía Peralta" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-gold-500 focus:outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="privadoWhatsapp" required placeholder="Ej: 3519876543" class="w-full bg-darkslate/90 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-gold-500 focus:outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-white/10 flex justify-end">
+                            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-darkslate font-bold px-8 py-3 rounded-lg shadow-lg shadow-gold-500/20 transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Consultar Disponibilidad por WhatsApp
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-wine-900/20 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
+            <p><strong class="text-gold-400 font-serif text-sm">ELIXIR - Wines & Spirits</strong> • <span id="footerLocalidad">Alberdi, Córdoba, Argentina</span></p>
+            <p>Venta prohibida a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <!-- Application Script Logic -->
+    <script>
+        const DEFAULT_CATALOG = {
+            cocteles: [
+                { id: 'c1', nombre: 'GIN TONIC', tag: 'gin', precio: '$8.500' },
+                { id: 'c2', nombre: 'CUCUMBER COLLINS', tag: 'gin', precio: '$9.000' },
+                { id: 'c3', nombre: 'VERMUCITO', tag: 'vermut', precio: '$6.500' },
+                { id: 'c4', nombre: 'PENICILLIN', tag: 'whisky', precio: '$10.500' }
+            ],
+            vinos: [
+                { id: 'v1', nombre: 'Cabernet Franc Reserva', varietal: 'cabernet-franc', precio: '$14.500' },
+                { id: 'v2', nombre: 'Malbec Reserva', varietal: 'malbec', precio: '$12.800' },
+                { id: 'v3', nombre: 'Pinot Noir Selection', varietal: 'pinot-noir', precio: '$16.200' },
+                { id: 'v4', nombre: 'Blend Cabernet - Malbec', varietal: 'cabernet-sauvignon', precio: '$15.000' },
+                { id: 'v5', nombre: 'Chardonnay Reserva', varietal: 'blancos', precio: '$13.500' },
+                { id: 'v6', nombre: 'Cabernet Franc Gran Reserva', varietal: 'cabernet-franc', precio: '$21.000' }
+            ],
+            config: {
+                whatsapp_numero: '5493510000000',
+                whatsapp_mensaje_default: 'Hola Elixir! Quisiera hacer una consulta.',
+                localidad_texto: 'Alberdi, Córdoba'
+            }
+        };
+
+        // Reemplaza esta URL por el enlace que obtuviste al desplegar tu Google Apps Script
+        const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwcdXpJ79upqlg_2m55tUJoKJYJQT_9rUJ4KUZ6FhGylBCGVFoDV7GEYmZ0e-OLYI0DgA/exec"
+        let catalogo = { ...DEFAULT_CATALOG };
+        let googleSheetsUrl = DEFAULT_SHEETS_URL;
+
+        async function sincronizarConGoogleSheets() {
+            if (!googleSheetsUrl) return;
+
+            try {
+                const res = await fetch(googleSheetsUrl);
+                const data = await res.json();
+
+                if (data) {
+                    if (data.vinos && data.vinos.length > 0) {
+                        catalogo.vinos = data.vinos.map((v, i) => ({
+                            id: 'v_gs_' + i,
+                            nombre: v.nombre || 'Vino Seleccionado',
+                            varietal: String(v.varietal || 'malbec').toLowerCase().trim(),
+                            precio: String(v.precio || 'Consultar').startsWith('$') ? String(v.precio) : `$${v.precio}`
+                        }));
+                    }
+
+                    if (data.cocteles && data.cocteles.length > 0) {
+                        catalogo.cocteles = data.cocteles.map((c, i) => ({
+                            id: 'c_gs_' + i,
+                            nombre: String(c.nombre || 'Trago').toUpperCase(),
+                            tag: String(c.tag || 'gin').toLowerCase().trim(),
+                            precio: String(c.precio || 'Consultar').startsWith('$') ? String(c.precio) : `$${c.precio}`
+                        }));
+                    }
+
+                    if (data.config && data.config.length > 0) {
+                        data.config.forEach(cfg => {
+                            if (cfg.clave && cfg.valor) {
+                                catalogo.config[cfg.clave.trim()] = String(cfg.valor).trim();
+                            }
+                        });
+                    }
+
+                    renderizarTodo();
+                }
+            } catch (err) {
+                console.error("Error leyendo Google Sheets:", err);
+            }
+        }
+
+        function renderizarTodo() {
+            renderCocteles();
+            renderVinos();
+            aplicarConfiguracion();
+            actualizarCotizacionBox();
+        }
+
+        function aplicarConfiguracion() {
+            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+            const mensajeWa = encodeURIComponent(catalogo.config.whatsapp_mensaje_default || 'Hola Elixir! Quisiera hacer una consulta.');
+            const localidad = catalogo.config.localidad_texto || 'Alberdi, Córdoba';
+
+            const btnHeader = document.getElementById('btnHeaderWhatsapp');
+            if (btnHeader) {
+                btnHeader.href = `https://wa.me/${numeroWa}?text=${mensajeWa}`;
+            }
+
+            const headerLoc = document.getElementById('headerLocalidad');
+            if (headerLoc) {
+                headerLoc.textContent = localidad;
+            }
+            const footerLoc = document.getElementById('footerLocalidad');
+            if (footerLoc) {
+                footerLoc.textContent = `${localidad}, Argentina`;
+            }
+        }
+
+        function renderCocteles() {
+            const grid = document.getElementById('coctelesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = catalogo.cocteles.map(c => `
+                <div class="coctel-card bg-darkslate/80 rounded-xl p-5 border border-white/10 hover:border-gold-500/50 transition flex flex-col justify-between" data-tag="${c.tag || 'otros'}">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-wine-900/80 text-gold-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-gold-500/30 uppercase">${c.tag || 'Cóctel'}</span>
+                            <span class="text-sm text-gold-400 font-bold">${c.precio || ''}</span>
+                        </div>
+                        <h4 class="font-serif font-bold text-lg text-white mb-2">${c.nombre}</h4>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderVinos() {
+            const grid = document.getElementById('vinosGrid');
+            if (!grid) return;
+
+            grid.innerHTML = catalogo.vinos.map(v => `
+                <div class="vino-card bg-darkslate/80 rounded-xl p-5 border border-white/10 hover:border-gold-500/50 transition flex flex-col justify-between" data-varietal="${v.varietal || 'malbec'}">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-wine-900/80 text-gold-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-gold-500/30 uppercase">${v.varietal || 'Vino'}</span>
+                            <span class="text-sm text-gold-400 font-bold">${v.precio}</span>
+                        </div>
+                        <h4 class="font-serif font-bold text-lg text-white mb-1">${v.nombre}</h4>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('tab-active'));
+
+            const selectedContent = document.getElementById(`section-${tabName}`);
+            const selectedBtn = document.getElementById(`tab-${tabName}`);
+
+            if (selectedContent && selectedBtn) {
+                selectedContent.classList.remove('hidden');
+                selectedBtn.classList.add('tab-active');
+            }
+        }
+
+        function filtrarCocteles(tag) {
+            const cards = document.querySelectorAll('.coctel-card');
+            cards.forEach(card => {
+                if (tag === 'todos' || card.getAttribute('data-tag') === tag) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function filtrarVinos(varietal) {
+            const cards = document.querySelectorAll('.vino-card');
+            cards.forEach(card => {
+                if (varietal === 'todos' || card.getAttribute('data-varietal') === varietal) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function selectEvent(eventString, precio) {
+            const select = document.getElementById('selectEvento');
+            if (select) {
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === eventString) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            calcularTotalReserva();
+            document.getElementById('formReserva').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calcularTotalReserva() {
+            const select = document.getElementById('selectEvento');
+            const lugaresInput = document.getElementById('reservaLugares');
+            const totalDisplay = document.getElementById('reservaTotal');
+
+            if (!select || !lugaresInput || !totalDisplay) return;
+
+            const selectedOption = select.options[select.selectedIndex];
+            const precioBase = parseInt(selectedOption.getAttribute('data-precio') || '18000', 10);
+            const lugares = parseInt(lugaresInput.value || '1', 10);
+
+            totalDisplay.textContent = `$${(precioBase * lugares).toLocaleString('es-AR')}`;
+        }
+
+        function procesarReserva(e) {
+            e.preventDefault();
+            const select = document.getElementById('selectEvento');
+            const nombre = document.getElementById('reservaNombre').value.trim();
+            const lugares = document.getElementById('reservaLugares').value;
+            const total = document.getElementById('reservaTotal').textContent;
+            const eventoNombre = select.value;
+            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+
+            document.getElementById('reservaExitoTitulo').textContent = `¡Excelente, ${nombre}! Registramos tu solicitud.`;
+            document.getElementById('reservaExitoDetalle').textContent = `Reserva para ${lugares} lugar(es) en: "${eventoNombre}". Total a abonar: ${total}`;
+
+            const mensajeWA = `Hola ELIXIR! Mi nombre es ${nombre}. Acabo de solicitar ${lugares} lugar(es) para el evento: "${eventoNombre}" (Total: ${total}). Envío este mensaje para coordinar el pago.`;
+            document.getElementById('btnWhatsappReserva').href = `https://wa.me/${numeroWa}?text=${encodeURIComponent(mensajeWA)}`;
+            document.getElementById('resultadoReserva').classList.remove('hidden');
+        }
+
+        function actualizarCotizacionBox() {
+            const checkboxes = document.querySelectorAll('.box-item-check');
+            const listaResumen = document.getElementById('boxListaResumen');
+            const totalPrecio = document.getElementById('boxTotalPrecio');
+
+            if (!listaResumen || !totalPrecio) return;
+
+            listaResumen.innerHTML = '';
+            let suma = 0;
+
+            checkboxes.forEach(chk => {
+                if (chk.checked) {
+                    const precio = parseInt(chk.getAttribute('data-precio') || '0', 10);
+                    suma += precio;
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center justify-between border-b border-white/5 pb-1';
+                    li.innerHTML = `<span>• ${chk.value}</span> <span class="text-gold-400 font-medium">$${precio.toLocaleString('es-AR')}</span>`;
+                    listaResumen.appendChild(li);
+                }
+            });
+
+            totalPrecio.textContent = `$${suma.toLocaleString('es-AR')}`;
+        }
+
+        function procesarBox(e) {
+            e.preventDefault();
+            const checkboxes = document.querySelectorAll('.box-item-check:checked');
+            const motivo = document.getElementById('boxMotivo').value.trim() || '¡Felicitaciones!';
+            const total = document.getElementById('boxTotalPrecio').textContent;
+            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+
+            let items = [];
+            checkboxes.forEach(c => items.push(c.value));
+
+            if (items.length === 0) {
+                alert('Por favor selecciona al menos 1 producto para tu Box.');
+                return;
+            }
+
+            const mensajeWA = `Hola ELIXIR! Quisiera encargar un Box de Regalo Personalizado:\n\n🎁 *Elementos:* ${items.join(', ')}\n✉️ *Mensaje/Tarjeta:* "${motivo}"\n💰 *Total estimado:* ${total}\n\n¿Cómo podemos coordinar la entrega?`;
+            window.open(`https://wa.me/${numeroWa}?text=${encodeURIComponent(mensajeWA)}`, '_blank');
+        }
+
+        function procesarEventoPrivado(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('privadoNombre').value.trim();
+            const whatsapp = document.getElementById('privadoWhatsapp').value.trim();
+            const numeroWa = catalogo.config.whatsapp_numero || '5493510000000';
+            const mensaje = `Hola ELIXIR! Quisiera consultar presupuesto para un evento privado.\n👤 *Nombre:* ${nombre}\n📱 *Teléfono:* ${whatsapp}`;
+            window.open(`https://wa.me/${numeroWa}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+
+        // Event listener para inicializar el sitio y la sincronización automática
+        window.addEventListener('DOMContentLoaded', () => {
+            renderizarTodo();
+            sincronizarConGoogleSheets();
+        });
+    </script>
+</body>
+</html>
